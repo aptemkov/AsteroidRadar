@@ -1,6 +1,7 @@
 package com.github.aptemkov.asteroidradar.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -9,7 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.aptemkov.asteroidradar.Asteroid
 import com.github.aptemkov.asteroidradar.R
+import com.github.aptemkov.asteroidradar.api.parseAsteroidsJsonResult
 import com.github.aptemkov.asteroidradar.databinding.FragmentMainBinding
+import org.json.JSONObject
 
 class MainFragment : Fragment() {
 
@@ -35,10 +38,10 @@ class MainFragment : Fragment() {
 
 
         val list = mutableListOf(
-            Asteroid(id = 1, codename = "test 1", closeApproachDate = "true", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
-            Asteroid(id = 2, codename = "test 2", closeApproachDate = "false", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
-            Asteroid(id = 3, codename = "test 3", closeApproachDate = "true", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = false ),
-            Asteroid(id = 4, codename = "test 4", closeApproachDate = "true", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
+            Asteroid(id = 1, codename = "test 1", closeApproachDate = "rgrtg", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
+            Asteroid(id = 2, codename = "test 2", closeApproachDate = "fwergewrgalse", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
+            Asteroid(id = 3, codename = "test 3", closeApproachDate = "trewrgue", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = false ),
+            Asteroid(id = 4, codename = "test 4", closeApproachDate = "trergehe", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
         )
 
         binding.asteroidRecycler.layoutManager = LinearLayoutManager(this.context)
@@ -54,6 +57,10 @@ class MainFragment : Fragment() {
         )
         binding.asteroidRecycler.adapter = adapter
         adapter.submitList(list)
+
+        viewModel.response.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
 
     }
 
