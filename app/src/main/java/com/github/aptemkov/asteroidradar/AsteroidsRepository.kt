@@ -13,8 +13,8 @@ class AsteroidsRepository (
 ) {
 
     suspend fun  refreshAsteroids(
-        startDate: String = today(),
-        endDate: String = seventhDay()
+        startDate: String,
+        endDate: String,
     ): ArrayList<Asteroid> {
         var asteroidList: ArrayList<Asteroid>
         withContext(Dispatchers.IO) {

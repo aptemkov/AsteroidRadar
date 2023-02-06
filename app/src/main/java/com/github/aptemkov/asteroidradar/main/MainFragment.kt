@@ -8,7 +8,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.aptemkov.asteroidradar.Asteroid
 import com.github.aptemkov.asteroidradar.R
-import com.github.aptemkov.asteroidradar.database.AsteroidsRoomDatabase
 import com.github.aptemkov.asteroidradar.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -48,7 +47,7 @@ class MainFragment : Fragment() {
         )
         binding.asteroidRecycler.adapter = adapter
 
-        viewModel.response.observe(viewLifecycleOwner) {
+        viewModel.asteroidsLiveData.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 
@@ -60,7 +59,20 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.week_list -> {
+                viewModel.weekAsteroids()
+            }
+            R.id.today_asteroids -> {
+                viewModel.todayAsteroids()
+            }
+            else -> {
+                viewModel.savedAsteroids()
+            }
+        }
         return true
+
     }
 
     override fun onDestroyView() {
