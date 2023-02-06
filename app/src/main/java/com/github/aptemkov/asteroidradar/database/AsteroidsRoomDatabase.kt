@@ -6,12 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.github.aptemkov.asteroidradar.Asteroid
 
-@Database(entities = [AsteroidDb::class], version = 1, exportSchema = false)
+@Database(entities = [Asteroid::class], version = 1, exportSchema = false)
 abstract class AsteroidsRoomDatabase : RoomDatabase() {
     abstract fun asteroidsDao(): AsteroidsDao
 
     companion object {
+
         private var INSTANCE: AsteroidsRoomDatabase? = null
+
         fun getDatabase(context: Context): AsteroidsRoomDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(

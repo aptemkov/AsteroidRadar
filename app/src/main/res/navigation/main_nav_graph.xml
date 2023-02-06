@@ -19,10 +19,9 @@
         android:name="com.github.aptemkov.asteroidradar.detail.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
-
         <argument
-            android:name="SelectedAsteroid"
-            app:argType="com.github.aptemkov.asteroidradar.Asteroid"/>
+            android:name="id"
+            app:argType="long" />
     </fragment>
 
 </navigation>

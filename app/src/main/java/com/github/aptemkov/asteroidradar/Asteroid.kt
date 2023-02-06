@@ -1,10 +1,11 @@
 package com.github.aptemkov.asteroidradar
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Parcelize
-data class Asteroid(
+@Entity(tableName = "asteroids_database")
+data class Asteroid constructor (
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
     val codename: String,
     val closeApproachDate: String,
@@ -13,4 +14,4 @@ data class Asteroid(
     val relativeVelocity: Double,
     val distanceFromEarth: Double,
     val isPotentiallyHazardous: Boolean,
-) : Parcelable
+)

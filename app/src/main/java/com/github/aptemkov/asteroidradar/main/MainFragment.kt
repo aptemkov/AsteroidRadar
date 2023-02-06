@@ -1,18 +1,15 @@
 package com.github.aptemkov.asteroidradar.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.aptemkov.asteroidradar.Asteroid
 import com.github.aptemkov.asteroidradar.R
-import com.github.aptemkov.asteroidradar.api.parseAsteroidsJsonResult
+import com.github.aptemkov.asteroidradar.database.AsteroidsRoomDatabase
 import com.github.aptemkov.asteroidradar.databinding.FragmentMainBinding
-import org.json.JSONObject
 
 class MainFragment : Fragment() {
 
@@ -20,8 +17,9 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+        ViewModelProvider(this)[MainViewModel::class.java]
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,26 +35,18 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val list = mutableListOf(
-            Asteroid(id = 1, codename = "test 1", closeApproachDate = "rgrtg", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
-            Asteroid(id = 2, codename = "test 2", closeApproachDate = "fwergewrgalse", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
-            Asteroid(id = 3, codename = "test 3", closeApproachDate = "trewrgue", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = false ),
-            Asteroid(id = 4, codename = "test 4", closeApproachDate = "trergehe", absoluteMagnitude = 1.34, estimatedDiameter = 1.32, relativeVelocity = 12.42, distanceFromEarth = 12.21, isPotentiallyHazardous = true ),
-        )
-
         binding.asteroidRecycler.layoutManager = LinearLayoutManager(this.context)
         val adapter = AsteroidsAdapter(
-            object: AsteroidsAdapter.AsteroidListener {
+            object : AsteroidsAdapter.AsteroidListener {
                 override fun onDetailInfo(asteroid: Asteroid) {
                     //Toast.makeText(activity?.applicationContext, "$asteroid", Toast.LENGTH_SHORT).show()
-                    val action = MainFragmentDirections.actionShowDetail(asteroid)
+                    val action = MainFragmentDirections.actionShowDetail(asteroid.id)
                     findNavController().navigate(action)
                 }
 
             }
         )
         binding.asteroidRecycler.adapter = adapter
-        adapter.submitList(list)
 
         viewModel.response.observe(viewLifecycleOwner) {
             adapter.submitList(it)

@@ -14,7 +14,9 @@ interface AsteroidsDao {
     fun getAllAsteroids(): Flow<List<Asteroid>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllAsteroids(vararg asteroids: AsteroidDb)
+    fun insertAllAsteroids(vararg asteroids: Asteroid)
 
+    @Query("SELECT * FROM asteroids_database WHERE id = :id")
+    fun getById(id: Long): Flow<Asteroid>
 
 }
