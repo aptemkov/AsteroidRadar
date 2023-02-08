@@ -79,4 +79,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room"
     kapt "androidx.room:room-compiler:$room"
 
+    def work = "2.7.1"
+    implementation "androidx.work:work-runtime-ktx:$work"
+
 }
