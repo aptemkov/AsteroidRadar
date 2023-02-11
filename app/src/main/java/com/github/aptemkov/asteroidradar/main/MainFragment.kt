@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.aptemkov.asteroidradar.Asteroid
 import com.github.aptemkov.asteroidradar.R
 import com.github.aptemkov.asteroidradar.databinding.FragmentMainBinding
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
 
@@ -51,6 +55,15 @@ class MainFragment : Fragment() {
             adapter.submitList(it)
         }
 
+        viewModel.pictureOfDayLiveData.observe(viewLifecycleOwner) {
+            GlobalScope.launch {
+                Picasso.get()
+                    .load(it?.url)
+                    .placeholder(R.drawable.placeholder_picture_of_day)
+                    .error(R.drawable.placeholder_picture_of_day)
+                    .into(binding.activityMainImageOfTheDay)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

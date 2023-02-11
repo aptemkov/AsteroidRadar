@@ -1,7 +1,10 @@
 package com.github.aptemkov.asteroidradar.api
 
+import android.util.Log
 import com.github.aptemkov.asteroidradar.Asteroid
 import com.github.aptemkov.asteroidradar.Constants
+import com.github.aptemkov.asteroidradar.PictureOfDay
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,4 +60,18 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
     }
 
     return formattedDateList
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+suspend fun loadPictureOfDay(): PictureOfDay? {
+
+    var pictureOfDay: PictureOfDay
+    withContext(Dispatchers.IO) {
+        pictureOfDay = AsteroidApi.api.getDayPicture(apiKey = Constants.API_KEY).await()
+    }
+    if (pictureOfDay.mediaType == "image") {
+        Log.i("TEST", "NetworkUtils:$pictureOfDay")
+        return pictureOfDay
+    }
+    return null
 }

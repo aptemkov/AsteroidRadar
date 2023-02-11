@@ -5,7 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.github.aptemkov.asteroidradar.database.AsteroidsRoomDatabase
 
-class UpdateWorker(val context: Context, val workerParameters: WorkerParameters) :
+class UpdateWorker(private val context: Context, workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters) {
 
     override suspend fun doWork(): Result {

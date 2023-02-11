@@ -14,7 +14,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.text.SimpleDateFormat
 import java.util.*
 
 interface AsteroidsApi {
@@ -38,12 +37,6 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
-
-private fun formatDate(date: Date): String {
-    val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
-    return dateFormat.format(date)
-}
-
 object AsteroidApi {
 
     private val retrofit = Retrofit.Builder()
@@ -52,7 +45,6 @@ object AsteroidApi {
         .baseUrl(BASE_URL)
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
-
 
     val api: AsteroidsApi = retrofit.create(AsteroidsApi::class.java)
 }

@@ -1,16 +1,17 @@
 package com.github.aptemkov.asteroidradar.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.github.aptemkov.asteroidradar.Asteroid
 import com.github.aptemkov.asteroidradar.AsteroidsRepository
 import com.github.aptemkov.asteroidradar.Constants
+import com.github.aptemkov.asteroidradar.PictureOfDay
+import com.github.aptemkov.asteroidradar.api.loadPictureOfDay
 import com.github.aptemkov.asteroidradar.database.AsteroidsRoomDatabase
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -20,10 +21,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var _asteroidsLiveData = MutableLiveData<List<Asteroid>>()
     val asteroidsLiveData: LiveData<List<Asteroid>> = _asteroidsLiveData
 
+    private val _pictureOfDayLiveData = MutableLiveData<PictureOfDay?>()
+    val pictureOfDayLiveData: LiveData<PictureOfDay?>
+        get() = _pictureOfDayLiveData
+
     init {
         viewModelScope.launch {
             _asteroidsLiveData.value = repository.refreshAsteroids(today(), seventhDay())
+            updatePictureOfDay()
         }
+    }
+
+    private suspend fun updatePictureOfDay() {
+        _pictureOfDayLiveData.value = loadPictureOfDay()
+
+        Log.i("TEST", "MainViewModel:${pictureOfDayLiveData.value}")
     }
 
     fun getById(id: Long): LiveData<Asteroid> {
