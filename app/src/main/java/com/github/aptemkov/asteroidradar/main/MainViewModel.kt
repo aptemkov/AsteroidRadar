@@ -10,6 +10,7 @@ import com.github.aptemkov.asteroidradar.PictureOfDay
 import com.github.aptemkov.asteroidradar.api.loadPictureOfDay
 import com.github.aptemkov.asteroidradar.database.AsteroidsRoomDatabase
 import kotlinx.coroutines.launch
+import okio.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,7 +19,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val database = AsteroidsRoomDatabase.getDatabase(application)
     private val repository = AsteroidsRepository(database)
 
-    private var _asteroidsLiveData = MutableLiveData<List<Asteroid>>()
+    private var _asteroidsLiveData: MutableLiveData<List<Asteroid>> =
+        database.asteroidsDao().getAllAsteroids().asLiveData() as MutableLiveData<List<Asteroid>>
     val asteroidsLiveData: LiveData<List<Asteroid>> = _asteroidsLiveData
 
     private val _pictureOfDayLiveData = MutableLiveData<PictureOfDay?>()
@@ -27,9 +29,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         viewModelScope.launch {
-            _asteroidsLiveData.value = repository.refreshAsteroids(today(), seventhDay())
-            updatePictureOfDay()
+            try {
+                updateAsteroidsList()
+                updatePictureOfDay()
+            } catch (_: IOException) {
+                savedAsteroids()
+            }
         }
+    }
+
+    private suspend fun updateAsteroidsList() {
+        _asteroidsLiveData.value = repository.refreshAsteroids(today(), seventhDay())
     }
 
     private suspend fun updatePictureOfDay() {
@@ -42,19 +52,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return database.asteroidsDao().getById(id).asLiveData()
     }
 
-    fun todayAsteroids(){
-        viewModelScope.launch {
-            _asteroidsLiveData.value = repository.refreshAsteroids(today(), today())
-        }
+    fun todayAsteroids() {
+        _asteroidsLiveData.value =
+            database.asteroidsDao().getTodayAsteroids(today()).asLiveData().value
     }
-    fun weekAsteroids(){
+
+    fun weekAsteroids() {
         viewModelScope.launch {
             _asteroidsLiveData.value = repository.refreshAsteroids(today(), seventhDay())
         }
     }
-    fun savedAsteroids(){
+
+    fun savedAsteroids() {
         viewModelScope.launch {
-            _asteroidsLiveData = database.asteroidsDao().getAllAsteroids().asLiveData() as MutableLiveData<List<Asteroid>>
+            _asteroidsLiveData = database.asteroidsDao().getAllAsteroids()
+                .asLiveData() as MutableLiveData<List<Asteroid>>
         }
     }
 

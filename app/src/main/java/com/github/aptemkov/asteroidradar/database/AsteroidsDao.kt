@@ -10,13 +10,16 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AsteroidsDao {
 
-    @Query("SELECT * FROM asteroids_database ORDER BY closeApproachDate ASC")
+    @Query("SELECT * FROM `asteroids_database` ORDER BY closeApproachDate ASC")
     fun getAllAsteroids(): Flow<List<Asteroid>>
+
+    @Query("SELECT * FROM `asteroids_database` WHERE closeApproachDate = :date")
+    fun getTodayAsteroids(date: String): Flow<List<Asteroid>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllAsteroids(vararg asteroids: Asteroid)
 
-    @Query("SELECT * FROM asteroids_database WHERE id = :id")
+    @Query("SELECT * FROM `asteroids_database` WHERE id = :id")
     fun getById(id: Long): Flow<Asteroid>
 
 }

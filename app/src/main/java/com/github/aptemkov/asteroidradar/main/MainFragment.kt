@@ -23,7 +23,6 @@ class MainFragment : Fragment() {
         ViewModelProvider(this)[MainViewModel::class.java]
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,14 +55,12 @@ class MainFragment : Fragment() {
         }
 
         viewModel.pictureOfDayLiveData.observe(viewLifecycleOwner) {
-            GlobalScope.launch {
                 Picasso.get()
                     .load(it?.url)
                     .placeholder(R.drawable.placeholder_picture_of_day)
                     .error(R.drawable.placeholder_picture_of_day)
                     .into(binding.activityMainImageOfTheDay)
             }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

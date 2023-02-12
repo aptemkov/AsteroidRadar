@@ -62,7 +62,6 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
     return formattedDateList
 }
 
-@OptIn(DelicateCoroutinesApi::class)
 suspend fun loadPictureOfDay(): PictureOfDay? {
 
     var pictureOfDay: PictureOfDay
