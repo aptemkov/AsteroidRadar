@@ -10,9 +10,6 @@ import com.github.aptemkov.asteroidradar.Asteroid
 import com.github.aptemkov.asteroidradar.R
 import com.github.aptemkov.asteroidradar.databinding.FragmentMainBinding
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
 

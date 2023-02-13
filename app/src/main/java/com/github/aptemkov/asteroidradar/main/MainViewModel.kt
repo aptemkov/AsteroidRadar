@@ -54,12 +54,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun todayAsteroids() {
         _asteroidsLiveData.value =
-            database.asteroidsDao().getTodayAsteroids(today()).asLiveData().value
+            asteroidsLiveData.value?.filter { it.closeApproachDate == today() }
     }
 
     fun weekAsteroids() {
         viewModelScope.launch {
-            _asteroidsLiveData.value = repository.refreshAsteroids(today(), seventhDay())
+            try {
+                _asteroidsLiveData.value = repository.refreshAsteroids(today(), seventhDay())
+            } catch (_: IOException) {}
         }
     }
 
